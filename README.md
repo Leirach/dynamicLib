@@ -1,0 +1,2 @@
+# dynamicLib
+dynamic library
