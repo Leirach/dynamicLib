@@ -5,10 +5,10 @@
 #include <ctype.h>
 
 //convierte de string de 0 y 1 a entero
-unsigned int asciiBinaryToInt(char *s) {
+int asciiBinaryToInt(char *s) {
 	int N = strlen(s);
 	int power = 0;
-	unsigned int num = 0;
+	int num = 0;
 
 	if (N > 32) {
 		return num;
@@ -28,7 +28,6 @@ unsigned int asciiBinaryToInt(char *s) {
 	return num;
 }
 
-//cambia de string de Hexadecimal a int
 unsigned int asciiHEXToInt(char *s) {
 	int N = strlen(s);
 	int power = 0;
@@ -39,11 +38,6 @@ unsigned int asciiHEXToInt(char *s) {
 	}
 
 	for (int i = N - 1; i >= 0; i--) {
-		if (s[i] >= 'a' && s[i] <= 'f')
-		{
-			s[i] = toupper(s[i]);
-		}
-
 		if ((s[i] >= '0' && s[i] <= '9') || (s[i] >= 'A' && s[i] <= 'F')) 
 		{
 			if (s[i] >= 'A') {
@@ -62,41 +56,43 @@ unsigned int asciiHEXToInt(char *s) {
 	return num;
 }
 
-//convierte de OCT a int
-int asciiOCTToInt(char *s) {
+double asciiToDouble(char *s) {
+	double num = 0;
 	int N = strlen(s);
-	int power = 0;
-	unsigned int num = 0;
+	int pt = -1;
 
-	//evitar overflow
-	if (N > 10) {
-		return num;
+	//si no encuentra es 0
+	for (int i = 0; i < N; i++) {
+		if (s[i] == '.') {
+			pt = i;
+		}
 	}
 
-	for (int i = N - 1; i >= 0; i--) {
-		if (s[i] >= '0' && s[i] <= '7') 
-		{
-			num += (s[i] - '0') * pow(8, power);
-			power++;
+	if (pt == -1) {
+		pt = N;
+	}
+
+	double power = 1;
+	for (int i = pt - 1; i >= 0; i--) {
+		if (s[i] >= '0' && s[i] <= '9') {
+			num += (s[i] - '0') * power;
 		}
 		else {
 			return num;
 		}
+		power *= 10;
+	}
+
+	power = 10;
+	for (int i = pt + 1; i < N; i++) {
+		if (s[i] >= '0' && s[i] <= '9') {
+			num += (s[i] - '0') / power;
+		}
+		else {
+			return num;
+		}
+		power *= 10;
 	}
 
 	return num;
-}
-
-//mueve los bits uno a la derecha para dividir entre 2
-unsigned int divideByTwo(unsigned int *i) {
-	//binary shift right
-	*i = *i >> 1;
-	return *i;
-}
-
-//mueve los bits uno a la izquierda para multiplicar por 2
-unsigned int multByTwo(unsigned int *i) {
-	//binary shift left
-	*i = *i << 1;
-	return *i;
 }
